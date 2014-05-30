@@ -6,6 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "async": "",
+    "ssh2": "",
+    "petit": ""
+  },
   "author": "",
   "license": "ISC"
 }

@@ -1,9 +1,9 @@
-var fleet = require('./');
+var lisa = require('./');
 
 var hosts = ['axl', 'mango'];
 var opts  = {};
 
-fleet.connect(hosts, opts, function(err, servers) {
+lisa.connect(hosts, opts, function(err, servers) {
   if (err) throw err;
 
   servers.on('stdout', function(server, chunk, command) {
