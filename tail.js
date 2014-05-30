@@ -1,19 +1,19 @@
 var fleet = require('./');
 
-var hosts = ['axl', 'zissou'];
+var hosts = ['axl', 'mango'];
 var opts  = {};
 
 fleet.connect(hosts, opts, function(err, servers) {
   if (err) throw err;
 
-  servers.on('stdout', function(server, chunk) {
+  servers.on('stdout', function(server, chunk, command) {
     server.log(chunk.toString())
   })
   
   servers.on('idle', function(err, res) {
     console.log('Finished.', err);
-    fleet.disconnect();
+    servers.disconnect();
   })
   
-  fleet.run('tail -f /var/log/nginx/access.log');
+  servers.run_command('tail -f /var/log/nginx/access.log');
 })

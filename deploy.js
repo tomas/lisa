@@ -1,65 +1,79 @@
-var build_command = function(what, message, exit_code) {
-  var code = exit_code || 1;
-  return what + ' || ( echo "' + message + '" && false) || exit ' + code;
-}
+var fleet  = require('./'),
+    tasks  = require('./tasks'),
+    colors = require('colors'),
+    logger = require('petit').current();
 
-var tasks = {};
-
-tasks.check_directory = function(options) {
-  return build_command('cd ' + options.base_path, 'Path not found.' + path, 15);
-}
-
-tasks.check_repo = function(options) {
-  return build_command('[ -d "' + options.git_repo + '" ] && true', 'Repo not found in ' + git_repo, 15);
-}
-
-var build_sequence = function(task, options) {
-  var list = [];
-  tasks.forEach(function(task) {
-    list.push(tasks[task](options));
-  })
-  
-  return list;
-}
+var debugging = true; // !!process.env.DEBUG;
 
 var rollback = function(servers, options) {
-  var commands = build_sequence(
-      'check_directory',
-      'check_repo'
-    , options);
-
+  var commands = tasks.rollback_sequence(options);
   servers.run_sequence(commands);
 }
 
-exports.deploy = function(hosts, options) {
-
-  var commands = build_sequence(
-    'check_directory',
-    'check_repo'
-  , options);
+exports.deploy = function(hosts, options, cb) {
   
+  var last_error;
+
+  if (options.verbose) 
+    logger.set_level('debug');
+
   fleet.connect(hosts, options, function(err, servers) {
-    if (err) throw(err);
+    if (err) throw err;
+      
+    servers.on('stdout', function(server, chunk, command) {
+      server.log((command.desc + ': ' + chunk.toString().trim()).cyan);
+    })
     
     servers.on('command', function(server, command, res) {
-      server.log('Command exited with code ' + res.code + ': ' + res.stdout.toString())
+      if (res.code == 0)
+        return server.log((res.time + 'ms -- ' + command.desc + ' succeeded.').green);
+
+      server.log((res.time + 'ms -- ' + command.desc + ' failed with code ' + res.code).red);
+      server.log((res.stderr + res.stdout).trim().red)
     })
     
     servers.on('idle', function(err, res) {
-      if (err && !rolling_back) 
-        return rollback(servers, options);
+      // logger.info('Sequence complete.');
       
-      fleet.disconnect();
-      cb && cb(err, res);
+      if (err && err.code != 17 && !last_error) {
+        last_error = err;
+        return rollback(servers, options);
+      }
+      
+      logger.stream.write('\n --- Deploy complete: ' + hosts.join(', ').yellow + '\n\n');
+      
+      servers.disconnect();
+      cb && cb(err || last_error, res);
     })
+
+    var commands = tasks.deploy_sequence(options); 
+    servers.run_sequence(commands);
     
-    fleet.sequence(commands);
+    process.on('SIGINT', function() {
+      logger.error('Interrupted!')
+      last_error = new Error('Deploy interrupted by SIGINT.');
+      rollback(servers, options);
+    })
   });
   
 }
 
+var hosts = ['nya', 'kupo'];
+var opts  = {
+  user: 'tomas',
+  port: 2121,
+  deploy_to : '/www/preyproject.com/m3',
+  verbose: true
+}
 
+var hosts = ['mango'];
+var opts  = {
+  deploy_to: '/www/preyproject.com/exceptions',
+  verbose: false,
+  xrestart: 'echo "Restarting app."'
+}
 
-exports.deploy(hosts, options, function(err) {
-  
+exports.deploy(hosts, opts, function(err, res) {
+  // console.log(' --- All done.');
+  // console.log(err);
 })
