@@ -1,0 +1,8 @@
+{
+  "hosts": [ "server" ],
+  "user": "deploy",
+  "deploy_to": "/home/deploy/apps/foobar",
+  "tasks": {
+    "restart": "monit restart ${application}"
+  }
+}

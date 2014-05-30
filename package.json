@@ -2,7 +2,10 @@
   "name": "lisa",
   "version": "0.0.1",
   "description": "Deploy tool.",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "bin": {
+    "lisa": "./bin/lisa"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +14,6 @@
     "ssh2": "",
     "petit": ""
   },
-  "author": "",
+  "author": "Tomas Pollak <tomas@forkhq.com>",
   "license": "ISC"
 }

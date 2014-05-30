@@ -1,0 +1,15 @@
+{
+  "user": "deploy",
+  "deploy_to": "/home/deploy/apps/foobar",
+  "verbose": true,
+  "roles": {
+    "frontend": [ "web1" ],
+    "backend": [ "backend1" ]
+  },
+  "tasks": {
+    "restart": {
+      "frontend": "npm restart",
+      "backend": "thin restart"
+    }
+  }
+}
