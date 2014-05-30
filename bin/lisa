@@ -2,15 +2,16 @@
 
 var lisa    = require('./..'),
     version = require('./../package').version,
-    command = process.argv[2];
+    command = process.argv[2],
+    args    = process.argv.slice(2);
 
 function help() {
-  console.log('Lisa v' + version);
-  console.log('Usage: lisa [stage] [command] [options]');
+  console.log('\nLisa v' + version);
+  console.log('Usage: lisa [stage] [command] [options]\n');
 }
 
 if (command && command.length > 2)
-  lisa.run(process.argv.slice(2));
+  lisa.run(args);
 else
-  help()
+  help() || lisa.show_tasks(args)
   
