@@ -1,12 +1,15 @@
 {
+  "application": "myapp",
+  "branch": "master",
   "deploy_to": "/home/deploy/apps/foobar",
   "default_stage": "staging",
   "keep_releases": 3,
-  "branch": "master",
   "tasks": {
-    "restart": {
-      "web": "sudo service restart ${application}",
-      "workers": "rake workers:restart"
+    "deploy": {
+      "restart": {
+        "web": "sudo service restart {{application}}",
+        "workers": "rake workers:restart"
+      }
     }
   },
   "stages": {
@@ -19,7 +22,6 @@
       }
     },
     "staging": {
-      "port": 3333,
       "roles": {
         "web": [ "staging-web1" ],
         "workers": [ "staging-workers1" ]

@@ -1,5 +1,6 @@
 {
-  "application": "favorites",
+  "application": "myapp",
+  "branch": "master",
   "deploy_to": "/home/deploy/apps/foobar",
   "default_stage": "staging",
   "keep_releases": 3,
