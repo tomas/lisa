@@ -7,9 +7,11 @@
     "backend": [ "backend1" ]
   },
   "tasks": {
-    "restart": {
-      "frontend": "npm restart",
-      "backend": "thin restart"
+    "deploy": {
+      "restart": {
+        "frontend": "npm restart",
+        "backend": "thin restart"
+      }
     }
   }
 }

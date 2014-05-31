@@ -1,21 +1,30 @@
 {
+  "application": "favorites",
   "deploy_to": "/home/deploy/apps/foobar",
   "default_stage": "staging",
   "keep_releases": 3,
-  "branch": "master",
   "tasks": {
-    "restart": {
-      "web": "sudo service restart ${application}",
-      "workers": "rake workers:restart"
+    "deploy": {
+      "restart": {
+        "web": "sudo service restart {{application}}",
+        "workers": "rake workers:restart"
+      },
+      "after_pull_changes": "echo {{revision}} >> {{current_path}}/REVISION.txt"
     }
   },
   "stages": {
     "production": {
-      "branch": "stable",
       "port": 2222,
       "roles": {
         "web": [ "production-web1", "production-web2" ],
         "workers": [ "production-workers1", "production-workers2" ]
+      },
+      "tasks": {
+        "deploy": {
+          "before_restart": {
+            "web": "picky production servers that do something special"
+          }
+        }
       }
     },
     "staging": {
