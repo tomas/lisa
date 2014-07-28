@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "async": "",
-    "ssh2": "",
-    "petit": ""
+    "colors": "^0.6.2",
+    "petit": "",
+    "ssh2": ""
   },
   "author": "Tomas Pollak <tomas@forkhq.com>",
   "license": "ISC"
