@@ -8,9 +8,10 @@ var lisa    = require('./..'),
 function help() {
   console.log('\nLisa v' + version);
   console.log('Usage: lisa [stage] [command] [options]\n');
+  console.log('Available commands:');
 }
 
-if (command && command.length > 2)
+if (command && command.length > 2 && command !== 'help')
   lisa.run(args);
 else
   help() || lisa.show_tasks(args)
