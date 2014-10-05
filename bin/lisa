@@ -5,10 +5,28 @@ var lisa    = require('./..'),
     command = process.argv[2],
     args    = process.argv.slice(2);
 
+function example(str, desc) {
+  var tabs = str.length > 20 ? '\t\t' : '\t\t\t';
+  console.log(str + tabs + desc);
+}
+
 function help() {
   console.log('\nLisa v' + version);
-  console.log('Usage: lisa [stage] [command] [options]\n');
-  console.log('Available commands:');
+  console.log('Usage: lisa [stage:role] [command] [options]');
+
+  console.log('\nExamples:\n');
+  example('lisa console', 'opens console in primary host in default stage');
+
+  example('lisa deploy', 'deploys to all roles in default stage');
+  example('lisa production deploy', 'deploys to all roles in production stage');
+  example('lisa staging:api deploy', 'deploys to role "api" in staging stage');
+  example('lisa production:web deploy:restart', 'runs restart command from deploy task in web role in production');
+
+  example('lisa tail', 'tails first log file defined for default stage');
+  example('lisa production tail api', 'tails "server" log file defined in production stage');
+  example('lisa staging:workers tail log/rake.log', 'tails specific log file in workers role in staging stage.');
+
+  console.log('\nAvailable commands:');
 }
 
 if (command && command.length > 2 && command !== 'help')
