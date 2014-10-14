@@ -12,7 +12,7 @@ function example(str, desc) {
 
 function help() {
   console.log('\nLisa v' + version);
-  console.log('Usage: lisa [stage:role] [command] [options]');
+  console.log('Usage: lisa [stage:role] [command:subcommand] [options]');
 
   console.log('\nExamples:\n');
   example('lisa console', 'opens console in primary host in default stage');
@@ -29,8 +29,10 @@ function help() {
   console.log('\nAvailable commands:');
 }
 
-if (command && command.length > 2 && command !== 'help')
-  lisa.run(args);
-else
+
+if (!command || command == 'help')
   help() || lisa.show_tasks(args)
-  
+else if (command == 'new')
+  lisa.build(args);
+else
+  lisa.run(args);

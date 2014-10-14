@@ -10,9 +10,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "async": "",
+    "async": "^0.9.0",
     "colors": "^0.6.2",
+    "extend": "^2.0.0",
     "petit": "",
+    "reply": "^0.3.1",
     "ssh2": ""
   },
   "author": "Tomas Pollak <tomas@forkhq.com>",

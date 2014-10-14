@@ -3,8 +3,8 @@
   "user": "deploy",
   "deploy_to": "/home/deploy/apps/foobar",
   "tasks": {
-  	"deploy": {
-  	  "restart": "monit restart {{application}}"
-  	}
+    "deploy": {
+      "restart": "monit restart {{application}}"
+    }
   }
 }
