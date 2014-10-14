@@ -4,6 +4,6 @@
   "branch": "dev",
   "deploy_to": "/home/deploy/apps/foobar",
   "tasks": {
-    "restart": "monit restart ${application}"
+    "restart": "monit restart {{application}}"
   }
 }
