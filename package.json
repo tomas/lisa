@@ -14,7 +14,7 @@
     "colors": "^0.6.2",
     "extend": "^2.0.0",
     "petit": "",
-    "reply": "^0.3.1",
+    "reply": "^0.4.0",
     "ssh2": ""
   },
   "author": "Tomas Pollak <tomas@forkhq.com>",
