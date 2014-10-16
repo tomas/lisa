@@ -1,0 +1,33 @@
+{
+  "application": "two-stages-no-roles",
+  "repository": "https://github.com/zerocool/gibson.git",
+  "no_releases": false,
+  "keep_releases": 2,
+  "deploy_to": "/var/www/gibson",
+  "user": "gibson",
+  "default_stage": "beta",
+  "stages": {
+    "beta": {
+      "environment": "staging",
+      "branch": "beta",
+      "hosts": [
+        "beta1.server.com",
+        "beta2.server.com"
+      ]
+    },
+    "stable": {
+      "environment": "production",
+      "branch": "stable",
+      "hosts": [
+        "stable1.server.com",
+        "stable2.server.com"
+      ]
+    }
+  },
+  "tasks": {
+    "deploy:restart": "god restart {{environment}}"
+  },
+  "logs": {
+    "app": "log/{{environment}}.log"
+  }
+}

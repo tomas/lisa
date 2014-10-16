@@ -1,0 +1,99 @@
+{
+  "application": "secret-project",
+  "repository": "git@github.com:tomas/secret-project",
+  "keep_releases": 3,
+  "deploy_to": "/home/tomas/public/secret-project.com",
+  "user": "tomas",
+  "tasks": {
+    "deploy:start": "monit start {{application}}",
+    "deploy:stop": "monit stop {{application}}"
+  },
+  "logs": {
+    "app": "log/{{environment}}.log"
+  },
+  "stages": {
+    "staging": {
+      "environment": "staging",
+      "branch": "staging",
+      "roles": {
+        "api": {
+          "hosts": [
+            "api-staging-1"
+          ],
+          "tasks": {
+            "deploy:restart": "pumactl -p pids/puma.pid restart",
+          },
+          "logs": {
+            "puma" : "log/puma.log"
+          },
+          "shared_paths": [
+            "config/config.yml",
+            "config/puma.rb",
+            "sockets",
+            "pids",
+            "log"
+          ]
+        },
+        "workers": {
+          "hosts": [
+            "workers-staging-1"
+          ],
+          "tasks": {
+            "deploy:restart": "ENV={{environment}} rake workers:restart"
+          },
+          "logs": {
+            "workers": "log/workers.log"
+          },
+          "shared_paths": [
+            "config/config.yml",
+            "config/resque.yml",
+            "pids",
+            "log"
+          ]
+        }
+      }
+    },
+    "production": {
+      "environment": "production",
+      "branch": "master",
+      "roles": {
+        "api": {
+          "hosts": [
+            "api-production-1"
+          ],
+          "tasks": {
+            "deploy:restart": "pumactl -p pids/puma.pid restart",
+          },
+          "logs": {
+            "app"  : "log/app.log",
+            "puma" : "log/puma.log"
+          },
+          "shared_paths": [
+            "config/config.yml",
+            "config/puma.rb",
+            "sockets",
+            "pids",
+            "log"
+          ]
+        },
+        "workers": {
+          "hosts": [
+            "workers-production-1"
+          ],
+          "tasks": {
+            "deploy:restart": "ENV={{environment}} rake workers:restart"
+          },
+          "logs": {
+            "workers": "log/workers.log"
+          },
+          "shared_paths": [
+            "config/config.yml",
+            "config/resque.yml",
+            "pids",
+            "log"
+          ]
+        }
+      }
+    }
+  }
+}

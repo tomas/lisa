@@ -1,0 +1,30 @@
+{
+  "application": "single-stage-two-roles",
+  "repository": "/var/git/local-repo.git",
+  "no_releases": false,
+  "keep_releases": 3,
+  "deploy_to": "/home/deploy/apps/the-app",
+  "environment": "production",
+  "branch": "master",
+  "primary_host": "app-server",
+  "user": "deploy",
+  "roles": {
+    "app": {
+      "hosts": [
+        "app-server"
+      ]
+    },
+    "workers": {
+      "hosts": [
+        "workers-server"
+      ]
+    }
+  },
+  "tasks": {
+    "console": "irb -r ./app/models",
+    "deploy:restart": "foreman restart"
+  },
+  "logs": {
+    "app": "log/{{environment}}.log"
+  }
+}

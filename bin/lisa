@@ -5,9 +5,13 @@ var lisa    = require('./..'),
     command = process.argv[2],
     args    = process.argv.slice(2);
 
+
+function pad(str, len, char) {
+ return (str + new Array(len).join(char || ' ')).slice(0, len);
+}
+
 function example(str, desc) {
-  var tabs = str.length > 20 ? '\t\t' : '\t\t\t';
-  console.log(str + tabs + desc);
+  console.log(pad(str, 45) + desc);
 }
 
 function help() {
@@ -16,22 +20,23 @@ function help() {
 
   console.log('\nExamples:\n');
   example('lisa console', 'opens console in primary host in default stage');
+  example('lisa production console', 'opens console in primary host in production stage');
 
   example('lisa deploy', 'deploys to all roles in default stage');
   example('lisa production deploy', 'deploys to all roles in production stage');
   example('lisa staging:api deploy', 'deploys to role "api" in staging stage');
   example('lisa production:web deploy:restart', 'runs restart command from deploy task in web role in production');
 
-  example('lisa tail', 'tails first log file defined for default stage');
-  example('lisa production tail api', 'tails "server" log file defined in production stage');
+  example('lisa tail', 'tails first log file defined for all roles in default stage');
+  example('lisa production tail puma', 'tails "puma" log file defined in production stage');
   example('lisa staging:workers tail log/rake.log', 'tails specific log file in workers role in staging stage.');
 
   console.log('\nAvailable commands:');
+  lisa.show_tasks(args)
 }
 
-
 if (!command || command == 'help')
-  help() || lisa.show_tasks(args)
+  help()
 else if (command == 'new')
   lisa.build(args);
 else

@@ -1,0 +1,2 @@
+- Tasks at stage level. i.e. production servers do restart via monit vs staging servers via god.
+- Logs at stage level?

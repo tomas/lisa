@@ -1,0 +1,24 @@
+{
+  "application": "figaro.js",
+  "repository": "server.com/home/lucy/figaro.git",
+  "deploy_to": "/www/lucy/figaro",
+  "branch": "refactor",
+  "user": "git",
+  "shared_paths": [
+    "config.js",
+    "pids",
+    "logs"
+  ],
+  "hosts": [
+    "glassonion"
+  ],
+  "tasks": {
+    "console": "node console.js",
+    "deploy:start": "npm start",
+    "deploy:stop": "npm stop"
+  },
+  "logs": {
+    "express" : "log/express.log", 
+    "system"  : "/var/log/system.log"
+  }
+}

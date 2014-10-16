@@ -1,0 +1,32 @@
+{
+  "application": "double-agent",
+  "repository": "git@github.com:me/double-agent.git",
+  "no_releases": false,
+  "keep_releases": 3,
+  "user": "tomas",
+  "stages": {
+    "testing": {
+      "environment": "testing",
+      "branch": "unstable",
+      "deploy_to": "/var/apps/double-agent/testing",
+      "hosts": [
+        "my.only.server.com"
+      ]
+    },
+    "production": {
+      "environment": "production",
+      "branch": "master",
+      "deploy_to": "/var/apps/double-agent/production",
+      "hosts": [
+        "my.only.server.com"
+      ]
+    }
+  },
+  "tasks": {
+    "console": "bin/rails c {{environment}}",
+    "deploy:restart": "monit restart {{application}}-{{stage}}"
+  },
+  "logs": {
+    "app": "log/{{environment}}.log"
+  }
+}
