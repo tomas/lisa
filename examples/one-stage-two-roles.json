@@ -11,12 +11,13 @@
   "roles": {
     "app": {
       "hosts": [
-        "app-server"
+        "app-server-1",
+        "app-server-2"
       ]
     },
     "workers": {
       "hosts": [
-        "workers-server"
+        "workers-server-1"
       ]
     }
   },
