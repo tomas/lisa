@@ -18,7 +18,7 @@ function help() {
   console.log('\nLisa v' + version);
   console.log('Usage: lisa [stage:role] [command:subcommand] [options]');
 
-  console.log('\nExamples:\n');
+  console.log('\n Examples:\n');
   example('lisa console', 'opens console in primary host in default stage');
   example('lisa production console', 'opens console in primary host in production stage');
 
@@ -31,7 +31,7 @@ function help() {
   example('lisa production tail puma', 'tails "puma" log file defined in production stage');
   example('lisa staging:workers tail log/rake.log', 'tails specific log file in workers role in staging stage.');
 
-  console.log('\nAvailable commands:');
+  console.log('\n Available commands:\n');
   lisa.show_tasks(args)
 }
 
