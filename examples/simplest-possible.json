@@ -1,16 +1,15 @@
 {
+  "repository": "git@github.com:user/foobar.git",
   "deploy_to": "~/apps/foobar",
   "host": "my.server.com"
 }
 
 // yes, this actually works. it basically uses all the defaults.
-// 
 // - logged user name for deploy (USER env variable)
 // - master branch
 // - no shared paths to symlink
 // - no console command
 // - no log files are tailable
-// - pulls from 'origin' remote in $deploy_to/repo dir
 // - keeps 3 releases in $deploy_to/releases dir 
 // - installs dependencies via npm or bundle install depending on presence of Gemfile or package.json
 // - restarts using foreman or npm, depending of presence of Procfile or package.json

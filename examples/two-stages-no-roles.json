@@ -1,7 +1,6 @@
 {
   "application": "two-stages-no-roles",
   "repository": "https://github.com/zerocool/gibson.git",
-  "no_releases": false,
   "keep_releases": 2,
   "deploy_to": "/var/www/gibson",
   "user": "gibson",

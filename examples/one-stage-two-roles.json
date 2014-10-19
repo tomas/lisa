@@ -1,8 +1,7 @@
 {
   "application": "single-stage-two-roles",
   "repository": "/var/git/local-repo.git",
-  "no_releases": false,
-  "keep_releases": 3,
+  "keep_releases": 5,
   "deploy_to": "/home/deploy/apps/the-app",
   "environment": "production",
   "branch": "master",

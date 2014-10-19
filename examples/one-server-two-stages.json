@@ -1,8 +1,6 @@
 {
   "application": "double-agent",
   "repository": "git@github.com:me/double-agent.git",
-  "no_releases": false,
-  "keep_releases": 3,
   "user": "tomas",
   "stages": {
     "testing": {
