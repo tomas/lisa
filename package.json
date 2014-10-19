@@ -16,6 +16,7 @@
     "extend": "^2.0.0",
     "petit": "",
     "reply": "^0.4.0",
+    "rtop": "^0.1.1",
     "ssh2": ""
   },
   "author": "Tomas Pollak <tomas@forkhq.com>",
