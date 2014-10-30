@@ -17,7 +17,8 @@
     "petit": "",
     "reply": "^0.4.0",
     "rtop": "^0.1.1",
-    "ssh2": ""
+    "ssh2": "",
+    "ssh2-multiplexer": "0.0.6"
   },
   "author": "Tomas Pollak <tomas@forkhq.com>",
   "license": "ISC"
