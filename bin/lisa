@@ -19,21 +19,27 @@ function help() {
   console.log('\nLisa v' + version);
   console.log('Usage: lisa [stage:role] [command:subcommand] [options]');
 
-  console.log('\n Examples:\n');
-  example('lisa console', 'opens console in primary host in default stage');
-  example('lisa production console', 'opens console in primary host in production stage');
-
-  example('lisa deploy', 'deploys to all roles in default stage');
-  example('lisa production deploy', 'deploys to all roles in production stage');
-  example('lisa staging:api deploy', 'deploys to role "api" in staging stage');
-  example('lisa production:web deploy:restart', 'runs restart command from deploy task in web role in production');
-
-  example('lisa tail', 'tails first log file defined for all roles in default stage');
-  example('lisa production tail puma', 'tails "puma" log file defined in production stage');
-  example('lisa staging:workers tail log/rake.log', 'tails specific log file in workers role in staging stage.');
-
   console.log('\n Available commands:\n');
-  lisa.show_tasks(args, process.stdout)
+  console.log('new      -- Initialize a new remote.json file interactively.');
+
+  lisa.show_tasks(args, process.stdout, function() {
+
+    console.log(' Examples:\n');
+    example('lisa console', 'opens console in primary host in default stage');
+    example('lisa production console', 'opens console in primary host in production stage');
+
+    example('lisa deploy', 'deploys to all roles in default stage');
+    example('lisa production deploy', 'deploys to all roles in production stage');
+    example('lisa staging:api deploy', 'deploys to role "api" in staging stage');
+    example('lisa production:web deploy:restart', 'runs restart command from deploy task in web role in production');
+
+    example('lisa logs', 'tails first log file defined for all roles in default stage');
+    example('lisa production logs puma', 'tails "puma" log file defined in production stage');
+    example('lisa staging:workers logs log/rake.log', 'tails specific log file in workers role in staging stage.');
+
+    console.log()
+  })
+
 }
 
 if (!command || command == 'help')
