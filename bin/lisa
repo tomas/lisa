@@ -33,7 +33,7 @@ function help() {
   example('lisa staging:workers tail log/rake.log', 'tails specific log file in workers role in staging stage.');
 
   console.log('\n Available commands:\n');
-  lisa.show_tasks(args)
+  lisa.show_tasks(args, process.stdout)
 }
 
 if (!command || command == 'help')
