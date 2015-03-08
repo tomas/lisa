@@ -49,7 +49,7 @@ describe('arguments', function() {
 
   before(function() {
     logger_spy = sinon.spy(logger, 'write');
-    logger.stream.writable = false;
+    // logger.stream.writable = false;
   })
 
   afterEach(function() {
@@ -102,7 +102,7 @@ describe('arguments', function() {
 
           task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
           task_stub.args[0][1].should.have.length(0); // args
-          should.not.exist(stub.args[0][2]); // subtask
+          should.not.exist(task_stub.args[0][2]); // subtask
 
           task_stub.reset();
         })
@@ -250,13 +250,85 @@ describe('arguments', function() {
 
   })
 
+  describe('lisa [stage] [task]', function() {
+
+    describe('nonexisting stage', function() {
+
+      before(function() {
+        test_config = {};
+        stub_exit();
+      })
+
+      after(restore_stub);
+
+      it('exits with message', function() {
+        run(['staging', 'console']);
+        stub.calledOnce.should.be.true;
+        stub.reset();
+        logger_spy.args[0][0].should.containEql('Invalid task: staging');
+      })
+
+    })
+
+    describe('if stage exists', function() {
+
+      before(function() {
+        test_config = { stages: basic_stages };
+        task_stub = sinon.stub(tasks.console, 'run', function(stage, args, subtask) { /* noop */ })
+      })
+
+      after(function() {
+        task_stub.restore();
+      })
+
+      describe('existing common task', function() {
+
+        it('calls [task].run()', function() {
+          run(['staging', 'console']);
+          task_stub.calledOnce.should.be.true;
+
+          task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+          task_stub.args[0][1].should.have.length(0); // args
+          should.not.exist(task_stub.args[0][2]); // subtask
+
+          task_stub.reset();
+        })
+
+      })
+
+      describe('existing root custom task', function() {
+
+        before(function() {
+          test_config.tasks = { test: 'command 123' };
+          spy  = sinon.spy(tasks.run, 'prepare');
+          stub = sinon.stub(dispatch, 'start', function(stage, args, subtask) { /* noop */ })
+        })
+
+        after(function() {
+          spy.restore();
+          stub.restore();
+        })
+
+        it('calls run task', function() {
+          run(['staging', 'test']);
+          spy.calledOnce.should.be.true;
+          stub.calledOnce.should.be.true;
+
+          var cmd = "command 123";
+          spy.args[0][1].should.eql(cmd); // raw command, is turned into the object tested below
+          stub.args[0][1].should.eql({ command: { all: 'cd {{current_path}} && ' + cmd } });
+        })
+
+      })
+
+    })
+
+  })
+
   describe('lisa [task:subtask]', function() {
 
   })
 
-  describe('lisa [stage] [task]', function() {
-
-  })
 
   describe('lisa [stage:role] [task]', function() {
 
