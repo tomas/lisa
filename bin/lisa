@@ -6,7 +6,6 @@ var lisa    = require('./..'),
     command = process.argv[2],
     args    = process.argv.slice(2);
 
-
 function pad(str, len, char) {
  return (str + new Array(len).join(char || ' ')).slice(0, len);
 }
