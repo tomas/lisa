@@ -65,6 +65,7 @@ describe('schema', function() {
         run(['check']);
         task_stub.calledOnce.should.be.true;
         task_stub.args[0][0].env.deploy_to.should.eql('/somewhere');
+        task_stub.args[0][0].env.current_path.should.eql('/somewhere/current');
       })
 
       it('explores if not defined on stage', function() {
