@@ -41,6 +41,7 @@ describe('arguments', function() {
     test_config.deploy_to = '/somewhere';
     var config_file = helpers.build_config(test_config);
     run_args.config = '/test' + config_file;
+    console.log(test_config);
     main.run(run_args);
     fs.unlinkSync(__dirname + config_file);
   }
@@ -289,6 +290,8 @@ describe('arguments', function() {
             logger_spy.args[1][0].should.containEql('Invalid task: web');
           })
 
+/*  --> this test no longer applies now that we check for stage+roles defined simultaneously
+
           describe('but role does exit at root level', function() {
 
             before(function() {
@@ -302,6 +305,7 @@ describe('arguments', function() {
             })
 
           })
+*/
 
         })
 
@@ -620,7 +624,7 @@ describe('arguments', function() {
       describe('but role does not (under staging)', function() {
 
         before(function() {
-          test_config.roles = { foo: { hosts: ['wrong'] } };
+          // test_config.roles = { web: { hosts: ['wrong'] } };
           should.not.exist(test_config.stages.staging.roles);
         })
 
@@ -716,7 +720,7 @@ describe('arguments', function() {
       describe('but role does not (under given stage)', function() {
 
         before(function() {
-          test_config.roles = { foo: { hosts: ['wrong'] } };
+          // test_config.roles = { foo: { hosts: ['wrong'] } };
           should.not.exist(test_config.stages.staging.roles);
         })
 

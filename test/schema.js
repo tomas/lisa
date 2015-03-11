@@ -10,8 +10,8 @@ var check    = require('../lib/tasks/check');
 var stage_settings = ['environment', 'branch', 'deploy_to'];
 var role_settings  = ['user', 'port'];
 
-var stage_disallowed = role_settings.concat(['tasks', 'checks', 'logs']);
-var role_disallowed  = stage_settings;
+var stage_disallowed = role_settings.concat(['tasks', 'checks', 'logs', 'shared_paths']);
+var role_disallowed  = stage_settings.concat(['primary_host']);
 
 describe('schema', function() {
 
@@ -21,7 +21,6 @@ describe('schema', function() {
     config_file = helpers.build_config(test_config);
     run_args.config = '/test' + config_file;
     main.run(run_args);
-
   }
 
   before(function() {
@@ -30,7 +29,8 @@ describe('schema', function() {
 
   afterEach(function() {
     task_stub.reset();
-    fs.unlinkSync(__dirname + config_file);
+    if (fs.existsSync(__dirname + config_file))
+      fs.unlinkSync(__dirname + config_file);
   })
 
   after(function() {
@@ -89,90 +89,244 @@ describe('schema', function() {
 
   describe('stage', function() {
 
-    stage_settings.forEach(function(key) {
+    describe('attributes', function() {
 
-      it('inherits ' + key + ' from root', function() {
+      stage_settings.forEach(function(key) {
 
-        test_config = { deploy_to: '/foobar', default_stage: 'production', stages: { production: { hosts: ['server1'] } } };
-        test_config[key] = 'something';
+        it('inherits ' + key + ' from root', function() {
+
+          test_config = { deploy_to: '/foobar', default_stage: 'production', stages: { production: { hosts: ['server1'] } } };
+          test_config[key] = 'something';
+
+          run(['check']);
+          task_stub.args[0][0].env[key].should.eql('something');
+        })
+
+      })
+
+      stage_disallowed.forEach(function(key) {
+
+        it('disallows setting ' + key, function() {
+
+          test_config = { deploy_to: '/foobar', default_stage: 'foo', stages: { foo: { hosts: ['server1'] } } };
+          test_config.stages.foo[key] = 'something';
+
+          (function() {
+            run(['check']);
+          }).should.throw('Invalid schema: ' + key + ' is not defined at stage level.');
+        })
+
+      })
+
+    })
+
+  })
+
+  describe('roles', function() {
+
+    describe('attributes', function() {
+
+      role_settings.forEach(function(key) {
+
+        it('inherits ' + key + ' from root', function() {
+
+          test_config = { deploy_to: '/foobar', roles: { web: { hosts: ['server2'] } } };
+          test_config[key] = 'something';
+
+          run(['check']);
+          task_stub.args[0][0].roles.web[key].should.eql('something');
+        })
+
+      })
+
+      role_disallowed.forEach(function(key) {
+
+        it('disallows setting ' + key, function() {
+
+          test_config = { deploy_to: '/foobar', roles: { web: { hosts: ['server2'] } } };
+          test_config.roles.web[key] = 'something';
+
+          (function() {
+            run(['check']);
+          }).should.throw('Invalid schema: ' + key + ' is not defined at role level.');
+        })
+
+      })
+
+    })
+
+    describe('not present', function() {
+
+      it('defaults to an "all" role', function() {
+
+        test_config = { deploy_to: '/foobar', host: 'foo' };
 
         run(['check']);
-        task_stub.args[0][0].env[key].should.eql('something');
-      })
+        task_stub.args[0][0].roles.should.have.keys(['all']);
+        task_stub.args[0][0].roles.all.hosts.should.eql(['foo']);
 
-    })
-
-    stage_disallowed.forEach(function(key) {
-
-      it('disallows setting ' + key, function() {
-
-        test_config = { deploy_to: '/foobar', default_stage: 'foo', stages: { foo: { hosts: ['server1'] } } };
-        test_config.stages.foo[key] = 'something';
-
-        (function() {
-          run(['check']);
-        }).should.throw('Invalid schema: ' + key + ' is not defined at stage level.');
       })
 
     })
 
   })
 
-  describe('role', function() {
+  describe('hosts', function() {
 
-    role_settings.forEach(function(key) {
+    describe('at root level', function() {
 
-      it('inherits ' + key + ' from root', function() {
+      it('expects an array', function() {
 
-        test_config = { deploy_to: '/foobar', roles: { web: { hosts: ['server2'] } } };
-        test_config[key] = 'something';
-
+        test_config = { deploy_to: '/foobar', hosts: ['one', 'two'] };
         run(['check']);
-        task_stub.args[0][0].roles.web[key].should.eql('something');
+        task_stub.args[0][0].roles.should.have.keys(['all']);
+        task_stub.args[0][0].roles.all.hosts.should.eql(['one', 'two']);
+
+      })
+
+      it('also accepts a singular host', function() {
+
+        test_config = { deploy_to: '/foobar', host: 'single' };
+        run(['check']);
+        task_stub.args[0][0].roles.should.have.keys(['all']);
+        task_stub.args[0][0].roles.all.hosts.should.eql(['single']);
+
       })
 
     })
 
-    role_disallowed.forEach(function(key) {
+    describe('at stage level', function() {
 
-      it('disallows setting ' + key, function() {
+      it('expects an array', function() {
 
-        test_config = { deploy_to: '/foobar', roles: { web: { hosts: ['server2'] } } };
-        test_config.roles.web[key] = 'something';
+        test_config = { deploy_to: '/foobar', stages: { unstable: { hosts: ['foo', 'bar'] } } };
+        run(['unstable', 'check']);
+        task_stub.args[0][0].roles.should.have.keys(['all']);
+        task_stub.args[0][0].roles.all.hosts.should.eql(['foo', 'bar']);
 
-        (function() {
-          run(['check']);
-        }).should.throw('Invalid schema: ' + key + ' is not defined at role level.');
+      })
+
+      it('also accepts a singular host', function() {
+
+        test_config = { deploy_to: '/foobar', stages: { unstable: { host: 'singular' } } };
+        run(['unstable', 'check']);
+        task_stub.args[0][0].roles.should.have.keys(['all']);
+        task_stub.args[0][0].roles.all.hosts.should.eql(['singular']);
+
+      })
+
+    })
+
+    describe('at role level', function() {
+
+      it('expects an array', function() {
+
+        test_config = { deploy_to: '/foobar', roles: { foo: { hosts: ['foo', 'bar'] } } };
+        run(['foo', 'check']);
+        task_stub.args[0][0].roles.should.have.keys(['foo']);
+        task_stub.args[0][0].roles.foo.hosts.should.eql(['foo', 'bar']);
+
+      })
+
+      it('also accepts a singular host', function() {
+
+        test_config = { deploy_to: '/foobar', roles: { foo: { host: 'justone' } } };
+        run(['foo', 'check']);
+        task_stub.args[0][0].roles.should.have.keys(['foo']);
+        task_stub.args[0][0].roles.foo.hosts.should.eql(['justone']);
+
+      })
+
+
+    })
+
+  })
+
+  describe('primary_host', function() {
+
+    describe('not set at root level', function() {
+
+      describe('no stages', function() {
+
+        describe('no roles', function() {
+
+          it('fallbacks to first root host', function() {
+            test_config = { deploy_to: '/foobar', host: 'monkey' };
+            run(['check']);
+            task_stub.args[0][0].env.primary_host.should.eql('monkey');
+          })
+
+        })
+
+        describe('with roles', function() {
+
+          it('does not set primary_host', function() {
+            test_config = { deploy_to: '/foobar', roles: { foo: { host: 'donkey' } } };
+            run(['check']);
+            should.not.exist(task_stub.args[0][0].env.primary_host);
+          })
+
+        })
+
+      })
+
+      describe('with stages', function() {
+
+        describe('not set at stage level', function() {
+
+          it('fallbacks to first stage host', function() {
+            test_config = { deploy_to: '/foobar', stages: { out: { hosts: ['eee'] } } };
+            run(['out', 'check']);
+            task_stub.args[0][0].env.primary_host.should.eql('eee');
+          })
+
+        })
+
+        describe('set at stage level', function() {
+
+          it('sets that one', function() {
+
+            // TODO: we should actually ensure that the host exists in the list!
+            test_config = { deploy_to: '/foobar', stages: { out: { primary_host: 'foo', host: 'monkey' } } };
+            run(['out', 'check']);
+            task_stub.args[0][0].env.primary_host.should.eql('foo');
+
+          })
+
+        })
+
+      })
+
+    })
+
+    describe('set at root level', function() {
+
+      describe('not set at stage level', function() {
+
+        it('uses the one at root level', function() {
+
+          test_config = { deploy_to: '/foobar', primary_host: 'zzz', stages: { out: { host: 'monkey' } } };
+          run(['out', 'check']);
+          task_stub.args[0][0].env.primary_host.should.eql('zzz');
+
+        })
+
+      })
+
+      describe('set at stage level', function() {
+
+        it('replaces the one at root level', function() {
+
+          test_config = { deploy_to: '/foobar', primary_host: 'zzz', stages: { out: { primary_host: 'foo', host: 'monkey' } } };
+          run(['out', 'check']);
+          task_stub.args[0][0].env.primary_host.should.eql('foo');
+
+        })
+
       })
 
     })
 
   })
-
-/*
-  describe('no stages', function() {
-
-    describe('and no roles', function() {
-
-    })
-
-    describe('with roles', function() {
-
-    })
-
-  })
-
-  describe('with stages', function() {
-
-    describe('and no roles', function() {
-
-    })
-
-    describe('with roles', function() {
-
-    })
-
-  })
-*/
 
 })
