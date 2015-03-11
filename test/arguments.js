@@ -1,9 +1,10 @@
-var fs     = require('fs'),
-    should = require('should'),
-    sinon  = require('sinon'),
-    main   = require('../lib'),
+var fs       = require('fs'),
+    helpers  = require('./helpers'),
+    should   = require('should'),
+    sinon    = require('sinon'),
+    main     = require('../lib'),
     dispatch = require('../lib/dispatch'),
-    logger = require('petit').current();
+    logger   = require('petit').current();
 
 var tasks  = {
   console : require('../lib/tasks/console'),
@@ -36,21 +37,12 @@ describe('arguments', function() {
 
   var stub, task_stub, logger_spy, test_config;
 
-  var config_file = '/lisa-config';
-
   function run(run_args) {
-    build_config(test_config);
+    test_config.deploy_to = '/somewhere';
+    var config_file = helpers.build_config(test_config);
     run_args.config = '/test' + config_file;
-    // console.log(test_config);
     main.run(run_args);
     fs.unlinkSync(__dirname + config_file);
-  }
-
-  function build_config(opts, out) {
-    opts.application = 'test';
-    opts.deploy_to   = '/somewhere';
-    config_file = '/lisa-config-' + Math.random() * 10000 + '.json';
-    fs.writeFileSync(__dirname + config_file, JSON.stringify(opts, null, 2) + "\n");
   }
 
   function restore_stub() {
@@ -332,7 +324,6 @@ describe('arguments', function() {
 
             task_stub.reset();
           })
-
 
         })
 
