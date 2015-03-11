@@ -41,7 +41,6 @@ describe('arguments', function() {
     test_config.deploy_to = '/somewhere';
     var config_file = helpers.build_config(test_config);
     run_args.config = '/test' + config_file;
-    console.log(test_config);
     main.run(run_args);
     fs.unlinkSync(__dirname + config_file);
   }
