@@ -18,7 +18,8 @@
     "petit": "",
     "reply": "^0.4.0",
     "rtop": "^0.1.7",
-    "ssh2": "^0.4.4"
+    "ssh2": "^0.4.4",
+    "termite": "0.0.0"
   },
   "devDependencies": {
     "sinon": "",
