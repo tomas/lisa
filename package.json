@@ -15,6 +15,7 @@
     "drawille-spark": "^1.0.1",
     "extend": "^2.0.0",
     "node-status": "^0.1.4",
+    "node-terminal": "^0.1.1",
     "petit": "",
     "reply": "^0.4.0",
     "rtop": "^0.1.7",
