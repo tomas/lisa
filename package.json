@@ -12,15 +12,11 @@
   "dependencies": {
     "async": "^0.9.0",
     "colors": "^0.6.2",
-    "drawille-spark": "^1.0.1",
     "extend": "^2.0.0",
-    "node-status": "^0.1.4",
-    "node-terminal": "^0.1.1",
-    "petit": "",
+    "petit": "0.0.6",
     "reply": "^0.4.0",
     "rtop": "^0.1.7",
-    "ssh2": "^0.4.4",
-    "termite": "0.0.0"
+    "ssh2": "^0.4.4"
   },
   "devDependencies": {
     "sinon": "",
