@@ -1,7 +1,7 @@
 {
   "name": "lisa",
   "version": "0.4.1",
-  "description": "Deploy tool.",
+  "description": "Lean deployment for single or multi-stage environments.",
   "main": "./lib/index.js",
   "bin": {
     "lisa": "./bin/lisa"
