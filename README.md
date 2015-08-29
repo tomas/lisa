@@ -77,7 +77,7 @@ Once you have your `remote.json` file in place, you can start running commands. 
 
 The full structure for commands is:
 
-    lisa [stage:role] [task:subtask]
+    lisa [stage:role] [task:subtask] [arguments]
 
 So, if you wanted to deploy to a specific stage, that'd be:
 
