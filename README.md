@@ -75,7 +75,7 @@ Once you have your `remote.json` file in place, you can start running commands. 
 
     lisa deploy
 
-The full structure for commands is:
+The full command structure goes like this:
 
     lisa [stage:role] [task:subtask] [arguments]
 
@@ -83,7 +83,7 @@ So, if you wanted to deploy to a specific stage, that'd be:
 
     lisa production deploy
 
-To run a console on one of your `api` servers (assuming you have separate roles under your production stage):
+To run the `console` task on one of your `api` servers (assuming you have separate roles under your production stage):
   
     lisa production:api console
 
@@ -105,6 +105,6 @@ To see what other commands and options are available, just run `lisa`.
 
 There are a few configuration examples under the [examples](https://github.com/tomas/lisa/tree/master/examples) directory, that show all possible combinations of stages vs roles. 
 
-## Author
+## Small print
 
 Written by Tomas Pollak. MIT.
