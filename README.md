@@ -71,7 +71,7 @@ Lisa will ensure all of your directories are in place, including the shared path
 
 # Running
 
-Once you have your `remote.json` file in place, you can start running commands. Normally, for a regular deploy to your default stage you'd run:
+Once you have your `remote.json` file in place, you can start running commands. Normally, for a regular deploy to your default (or only) stage you'd run:
 
     lisa deploy
 
@@ -93,11 +93,11 @@ As you can see in the first example, you can also skip the stage name and lisa w
 
 Would run the `top` task on your `api` servers under your default stage (e.g. `staging`).
 
-To tail the production logs, for example, you'd do:
+To tail logs on your production servers, for example, you'd do:
 
     lisa production tail workers
 
-Which will tail the `workers` log file defined in your `remote.json` file on your production servers. You can skip the `workers` argument, in which case the first one will be tailed.
+This will tail the `workers` log file defined in your `remote.json` file on your production servers. You can skip the `workers` argument, in which case the first one will be tailed.
 
 To see what other commands and options are available, just run `lisa`. 
 
