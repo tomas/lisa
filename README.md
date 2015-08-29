@@ -61,12 +61,12 @@ Lisa comes with a very useful config generator, so you can get started in less t
 
     lisa new
 
-And you'll be prompted a few questions that will allow Lisa to populate a new `remote.json` file with all your environment definitions (e.g. single vs multiple stages and single vs multiple roles). 
+And you'll be prompted a few questions that will allow Lisa to populate a new `remote.json` file with all your environment definitions (e.g. single vs multiple stages and single vs multiple roles on each stage). 
 
 Now, if your app hasn't been deployed to your server(s), meaning there's no `deploy_to` path, you can have lisa set everything up by running:
 
     lisa setup
-    
+
 Lisa will ensure all of your directories are in place, including the shared paths, and perform a clone of your repository so your can head on to your first deploy.
 
 # Running
@@ -96,10 +96,14 @@ Would run the `top` task on your `api` servers under your default stage (e.g. `s
 To tail the production logs, for example, you'd do:
 
     lisa production tail workers
-    
+
 Which will tail the `workers` log file defined in your `remote.json` file on your production servers. You can skip the `workers` argument, in which case the first one will be tailed.
 
 To see what other commands and options are available, just run `lisa`. 
+
+## Examples
+
+There are a few configuration examples under the [examples](https://github.com/tomas/lisa/tree/master/examples) directory, that show all possible combinations of stages vs roles. 
 
 ## Author
 
