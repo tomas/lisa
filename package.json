@@ -23,6 +23,13 @@
     "sinon": "",
     "should": ""
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomas/lisa.git"
+  },
+  "bugs": {
+    "url": "http://github.com/tomas/lisa/issues"
+  },
   "author": "Tomas Pollak <tomas@forkhq.com>",
-  "license": "ISC"
+  "license": "MIT"
 }
