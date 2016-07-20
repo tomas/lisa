@@ -16,7 +16,7 @@ Lisa reads the app's configuration from a file called `remote.json` located wher
 ``` js
 {
   "application": "foo-app",
-  "repository": "git@github.com:yourname:foo-app.git",
+  "repository": "git@github.com:yourname/foo-app.git",
   "repo_path": "/repo", 
   "deploy_to": "/home/yourname/apps/foo-app",
   "branch": "master",
