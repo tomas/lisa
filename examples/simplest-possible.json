@@ -12,6 +12,6 @@
  - no console command
  - no log files are tailable
  - keeps 3 releases in $deploy_to/releases dir 
- - installs dependencies via npm or bundle install depending on presence of Gemfile or package.json
+ - installs dependencies via bundler or npm or depending on presence of Gemfile or package.json
  - restarts using foreman or npm, depending of presence of Procfile or package.json
 */
