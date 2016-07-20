@@ -107,4 +107,4 @@ There are a few configuration examples under the [examples](https://github.com/t
 
 ## Small print
 
-Written by Tomas Pollak. MIT.
+Written by Tomas Pollak. MIT licensed.
