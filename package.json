@@ -16,7 +16,7 @@
     "inquirer": "^0.10.0",
     "petit": "0.0.6",
     "reply": "^0.4.0",
-    "rtop": "^0.3.0",
+    "rtop": "^0.3.2",
     "ssh2": "^0.4.4"
   },
   "devDependencies": {
