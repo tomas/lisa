@@ -8,6 +8,10 @@ var lisa    = require('./..'),
     command = process.argv[2],
     args    = process.argv.slice(2);
 
+function bold(str) {
+  return '\033[1m' + str + '\033[0m';
+}
+
 function pad(str, len, char) {
  return (str + new Array(len).join(char || ' ')).slice(0, len);
 }
@@ -16,34 +20,69 @@ function example(str, desc) {
   console.log(pad(str, 45) + desc);
 }
 
-function help() {
-  console.log('\nLisa v' + version);
-  console.log('Usage: lisa [stage:role] [command:subcommand] [options]');
+function examples() {
+  console.log('\n Examples:\n');
+  example('lisa console', 'opens console in primary host in default stage');
+  example('lisa production console', 'opens console in primary host in production stage');
 
-  console.log('\n Available commands:\n');
-  console.log('new      -- Initialize a new remote.json file interactively.');
+  example('lisa deploy', 'deploys to all roles in default stage');
+  example('lisa production deploy', 'deploys to all roles in production stage');
+  example('lisa staging:api deploy', 'deploys to role "api" in staging stage');
+  example('lisa production:web deploy:restart', 'runs restart command from deploy task in web role in production');
 
-  lisa.show_tasks(args, process.stdout, function() {
-
-    console.log(' Examples:\n');
-    example('lisa console', 'opens console in primary host in default stage');
-    example('lisa production console', 'opens console in primary host in production stage');
-
-    example('lisa deploy', 'deploys to all roles in default stage');
-    example('lisa production deploy', 'deploys to all roles in production stage');
-    example('lisa staging:api deploy', 'deploys to role "api" in staging stage');
-    example('lisa production:web deploy:restart', 'runs restart command from deploy task in web role in production');
-
-    example('lisa logs', 'tails first log file defined for all roles in default stage');
-    example('lisa production logs puma', 'tails "puma" log file defined in production stage');
-    example('lisa staging:workers logs log/rake.log', 'tails specific log file in workers role in staging stage.');
-
-    console.log()
-  })
-
+  example('lisa logs', 'tails first log file defined for all roles in default stage');
+  example('lisa production logs puma', 'tails "puma" log file defined in production stage');
+  example('lisa staging:workers logs log/rake.log', 'tails specific log file in workers role in staging stage.');
 }
 
-if (!command || command == 'help')
+function show_hosts(stage) {
+  function show_list_for(role) {
+    var hosts = role.hosts || [role.host];
+    console.log('   - Hosts: ' + hosts.join(', '))
+  }
+
+  if (stage.roles) {
+    for (var role in stage.roles) {
+      console.log('  - Role: ' + role);
+      show_list_for(stage.roles[role])
+    }
+  } else {
+    show_list_for(stage);
+  }
+}
+
+function show_info(config) {
+  console.log('\n Configuration for ' + bold(config.application) + ':');
+
+  if (config.stages) {
+    for (var stage in config.stages) {
+      console.log('\n - ' + bold('Stage: ' + stage));
+      show_hosts(config.stages[stage])
+    }
+  } else {
+    show_hosts(config);
+  }
+}
+
+function help() {
+  lisa.get_tasks(args, function(err, list, config) {
+    console.log(bold('Lisa v' + version));
+    console.log('Usage: lisa [stage:role] [task:subtask] [options]');
+
+    console.log('\n Available tasks:\n');
+    console.log(bold('new') + '      -- Initialize a new remote.json file interactively.');
+
+    if (list) { for (var task in list)
+      console.log([bold(task), list[task]].join('\t -- ')); }
+
+    if (config) show_info(config);
+
+    if (command == 'examples' || args.length > 1) examples();
+    console.log('\nRun `lisa examples` for a few real world examples.');
+  })
+}
+
+if (!command || command == 'help' || command == 'examples')
   help()
 else if (command == 'new')
   lisa.build(args);
