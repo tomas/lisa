@@ -56,7 +56,8 @@ function show_info(config) {
 
   if (config.stages) {
     for (var stage in config.stages) {
-      console.log('\n - ' + bold('Stage: ' + stage));
+      var is_default = config.default_stage == stage;
+      console.log('\n - ' + bold('Stage: ' + stage + (is_default ? ' (default)' : '')));
       show_hosts(config.stages[stage])
     }
   } else {
