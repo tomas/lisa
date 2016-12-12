@@ -17,7 +17,8 @@
     "petit": "0.0.6",
     "reply": "^0.4.0",
     "rtop": "^0.4.2",
-    "ssh2": "^0.4.4"
+    "ssh2": "^0.4.4",
+    "whenever": "^0.1.0"
   },
   "devDependencies": {
     "sinon": "",
