@@ -9,7 +9,7 @@ Lisa is a tool for deploying to one or multiple servers and running tasks on the
 
 Really. Capistrano is great but I wanted something leaner and faster. Then I found out about Mina but then realized that Mina lacked multi-server support. Also I wanted something faster than Ruby. Node.js with its beautiful streaming I/O seemed like a perfect fit.
 
-## How does the configuration file look like?
+## What does the configuration file look like?
 
 Lisa reads the app's configuration from a file called `remote.json` located wherever you want to run the lisa command. This is how a basic one looks for a single-stage, single-role environment:
 
