@@ -1,7 +1,9 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tomas/lisa/master/logo/lisa.png" alt="Lisa" />
+</p>
+
 Lisa
 ====
-
-![lisa](https://raw.githubusercontent.com/tomas/lisa/master/logo/lisa.png)
 
 Lisa is a tool for deploying to one or multiple servers and running tasks on them remotely, much like Capistrano or Mina but entirely written in Javascript. She uses a simple, clean JSON file for configuration, and comes with out of the box support for tailing log files, running a remote console and even monitoring your server(s). She's badass yet cute at the same time.
 
