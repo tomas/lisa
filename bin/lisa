@@ -73,8 +73,10 @@ function help() {
     console.log('\n Available tasks:\n');
     console.log(bold('new') + '      -- Initialize a new remote.json file interactively.');
 
-    if (list) { for (var task in list)
-      console.log([bold(task), list[task]].join('\t -- ')); }
+    if (list) { 
+      for (var task in list)
+        console.log([bold(task), list[task]].join('\t -- ')); 
+    }
 
     if (config) show_info(config);
 
@@ -83,8 +85,10 @@ function help() {
   })
 }
 
-if (!command || command == 'help' || command == 'examples')
+if (!command || command == 'help' || command == '--help' || command == '-h' || command == 'examples')
   help()
+else if (command == '-v' || command == '--version')
+  console.log(version)
 else if (command == 'new')
   lisa.build(args);
 else
