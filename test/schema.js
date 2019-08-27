@@ -24,11 +24,11 @@ describe('schema', function() {
   }
 
   before(function() {
-    task_stub = sinon.stub(check, 'prepare', function(stage, args, subtask) { /* noop */ });
+    task_stub = sinon.stub(check, 'prepare').callsFake(function(stage, args, subtask) { /* noop */ });
   })
 
   afterEach(function() {
-    task_stub.reset();
+    task_stub.resetHistory();
     if (fs.existsSync(__dirname + config_file))
       fs.unlinkSync(__dirname + config_file);
   })

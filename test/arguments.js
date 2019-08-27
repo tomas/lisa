@@ -54,14 +54,14 @@ describe('arguments', function() {
   }
 
   before(function() {
-    exit_stub = sinon.stub(process, 'exit', function() { /* noop */ })
+    exit_stub = sinon.stub(process, 'exit').callsFake(function() { /* noop */ });
     logger_spy = sinon.spy(logger, 'write');
     logger.stream.writable = false;
   })
 
   afterEach(function() {
-    logger_spy.reset();
-    exit_stub.reset();
+    logger_spy.resetHistory();
+    exit_stub.resetHistory();
   })
 
   after(function() {
@@ -137,7 +137,7 @@ describe('arguments', function() {
 
       before(function() {
         test_config = { stages: basic_stages() };
-        task_stub = sinon.stub(tasks.console, 'run', function(stage, args, subtask) { /* noop */ })
+        task_stub = sinon.stub(tasks.console, 'run').callsFake(function(stage, args, subtask) { /* noop */ })
       })
 
       after(function() {
@@ -150,12 +150,12 @@ describe('arguments', function() {
           run(['staging', 'console']);
           task_stub.calledOnce.should.be.true;
 
-          task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+          task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
           task_stub.args[0][0].roles.all.hosts.should.eql(['server1']);
           task_stub.args[0][1].should.have.length(0); // args
           should.not.exist(task_stub.args[0][2]); // subtask
 
-          task_stub.reset();
+          task_stub.resetHistory();
         })
 
       })
@@ -165,7 +165,7 @@ describe('arguments', function() {
         before(function() {
           test_config.tasks = { test: 'command 123' };
           spy  = sinon.spy(tasks.run, 'prepare');
-          stub = sinon.stub(dispatch, 'start', function(stage, args, subtask) { /* noop */ })
+          stub = sinon.stub(dispatch, 'start').callsFake(function(stage, args, subtask) { /* noop */ })
         })
 
         after(function() {
@@ -193,7 +193,7 @@ describe('arguments', function() {
   describe('lisa [role] [task]', function() {
 
     before(function() {
-      task_stub = sinon.stub(tasks.console, 'run', function(stage, args, subtask) { /* noop */ })
+      task_stub = sinon.stub(tasks.console, 'run').callsFake(function(stage, args, subtask) { /* noop */ })
     })
 
     after(function() {
@@ -222,13 +222,13 @@ describe('arguments', function() {
           run(['web', 'console']);
           task_stub.calledOnce.should.be.true;
 
-          task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+          task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
           task_stub.args[0][0].roles.should.have.keys(['web']); // only web role
           task_stub.args[0][0].roles.web.hosts.should.eql(['server3']);
           task_stub.args[0][1].should.have.length(0); // args
           should.not.exist(task_stub.args[0][2]); // subtask
 
-          task_stub.reset();
+          task_stub.resetHistory();
         })
 
       })
@@ -319,13 +319,13 @@ describe('arguments', function() {
             run(['web', 'console']);
             task_stub.calledOnce.should.be.true;
 
-            task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+            task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
             task_stub.args[0][0].roles.should.have.keys(['web']); // only web role
             task_stub.args[0][0].roles.web.hosts.should.eql(['server3']);
             task_stub.args[0][1].should.have.length(0); // args
             should.not.exist(task_stub.args[0][2]); // subtask
 
-            task_stub.reset();
+            task_stub.resetHistory();
           })
 
         })
@@ -341,7 +341,7 @@ describe('arguments', function() {
     describe('existing common task', function() {
 
       before(function() {
-        task_stub = sinon.stub(tasks.console, 'run', function(stage, args, subtask) { /* noop */ })
+        task_stub = sinon.stub(tasks.console, 'run').callsFake(function(stage, args, subtask) { /* noop */ })
       })
 
       after(function() {
@@ -358,11 +358,11 @@ describe('arguments', function() {
           run(['console']);
           task_stub.calledOnce.should.be.true;
 
-          task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+          task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
           task_stub.args[0][1].should.have.length(0); // args
           should.not.exist(task_stub.args[0][2]); // subtask
 
-          task_stub.reset();
+          task_stub.resetHistory();
         })
 
       })
@@ -411,7 +411,7 @@ describe('arguments', function() {
             run(['console']);
 
             task_stub.calledOnce.should.be.true;
-            task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+            task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
             task_stub.args[0][0].roles.all.hosts.should.eql(['server1']);
             task_stub.args[0][1].should.have.length(0); // args
             should.not.exist(task_stub.args[0][2]); // subtask
@@ -428,7 +428,7 @@ describe('arguments', function() {
       before(function() {
         test_config = { tasks: { test: 'command 123' } };
         spy  = sinon.spy(tasks.run, 'prepare');
-        stub = sinon.stub(dispatch, 'start', function(stage, args, subtask) { /* noop */ })
+        stub = sinon.stub(dispatch, 'start').callsFake(function(stage, args, subtask) { /* noop */ })
       })
 
       after(function() {
@@ -468,7 +468,7 @@ describe('arguments', function() {
     describe('existing common task', function() {
 
       before(function() {
-        task_stub = sinon.stub(tasks.console, 'run', function(stage, args, subtask) { /* noop */ })
+        task_stub = sinon.stub(tasks.console, 'run').callsFake(function(stage, args, subtask) { /* noop */ })
       })
 
       after(function() {
@@ -485,11 +485,11 @@ describe('arguments', function() {
           run(['console:foo']);
           task_stub.calledOnce.should.be.true;
 
-          task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+          task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
           task_stub.args[0][1].should.have.length(0); // args
           task_stub.args[0][2].should.eql('foo');
 
-          task_stub.reset();
+          task_stub.resetHistory();
         })
 
       })
@@ -538,13 +538,13 @@ describe('arguments', function() {
             run(['console:foo']);
 
             task_stub.calledOnce.should.be.true;
-            task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+            task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
             task_stub.args[0][0].roles.all.hosts.should.eql(['server1']);
 
             task_stub.args[0][1].should.have.length(0); // args
             task_stub.args[0][2].should.eql('foo'); // subtask
 
-            task_stub.reset();
+            task_stub.resetHistory();
           })
 
         })
@@ -558,7 +558,7 @@ describe('arguments', function() {
       before(function() {
         test_config = { tasks: { test: 'command 123' } };
         spy  = sinon.spy(tasks.run, 'prepare');
-        stub = sinon.stub(dispatch, 'start', function(stage, args, subtask) { /* noop */ })
+        stub = sinon.stub(dispatch, 'start').callsFake(function(stage, args, subtask) { /* noop */ })
       })
 
       after(function() {
@@ -613,7 +613,7 @@ describe('arguments', function() {
 
       before(function() {
         test_config = { stages: basic_stages() };
-        task_stub = sinon.stub(tasks.console, 'run', function(stage, args, subtask) { /* noop */ })
+        task_stub = sinon.stub(tasks.console, 'run').callsFake(function(stage, args, subtask) { /* noop */ })
       })
 
       after(function() {
@@ -647,13 +647,13 @@ describe('arguments', function() {
             run(['staging:web', 'console', 'argument']);
             task_stub.calledOnce.should.be.true;
 
-            task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+            task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
             task_stub.args[0][0].roles.should.have.keys('web');
             task_stub.args[0][0].roles.web.hosts.should.eql(['server3']);
             task_stub.args[0][1][0].should.eql('argument'); // args
             should.not.exist(); // subtask
 
-            task_stub.reset();
+            task_stub.resetHistory();
           })
 
         })
@@ -663,7 +663,7 @@ describe('arguments', function() {
           before(function() {
             test_config.tasks = { test: 'command 123' };
             spy  = sinon.spy(tasks.run, 'prepare');
-            stub = sinon.stub(dispatch, 'start', function(stage, args, subtask) { /* noop */ })
+            stub = sinon.stub(dispatch, 'start').callsFake(function(stage, args, subtask) { /* noop */ })
           })
 
           after(function() {
@@ -709,7 +709,7 @@ describe('arguments', function() {
 
       before(function() {
         test_config = { stages: basic_stages() };
-        task_stub = sinon.stub(tasks.console, 'run', function(stage, args, subtask) { /* noop */ })
+        task_stub = sinon.stub(tasks.console, 'run').callsFake(function(stage, args, subtask) { /* noop */ })
       })
 
       after(function() {
@@ -743,13 +743,13 @@ describe('arguments', function() {
             run(['staging:web', 'console:foo', 'argument']); // pass in an argument as well.
             task_stub.calledOnce.should.be.true;
 
-            task_stub.args[0][0].should.have.keys(['env', 'roles', 'tasks']); // stage
+            task_stub.args[0][0].should.have.keys('env', 'roles', 'tasks'); // stage
             task_stub.args[0][0].roles.should.have.keys('web');
             task_stub.args[0][0].roles.web.hosts.should.eql(['server3']);
             task_stub.args[0][1][0].should.eql('argument'); // args
             task_stub.args[0][2].should.eql('foo');
 
-            task_stub.reset();
+            task_stub.resetHistory();
           })
 
         })
@@ -759,7 +759,7 @@ describe('arguments', function() {
           before(function() {
             test_config.tasks = { test: 'command 123' };
             spy  = sinon.spy(tasks.run, 'prepare');
-            stub = sinon.stub(dispatch, 'start', function(stage, args, subtask) { /* noop */ })
+            stub = sinon.stub(dispatch, 'start').callsFake(function(stage, args, subtask) { /* noop */ })
           })
 
           after(function() {
