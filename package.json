@@ -1,6 +1,6 @@
 {
   "name": "lisa",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Lean deployment for single or multi-stage environments.",
   "main": "./lib/index.js",
   "bin": {
